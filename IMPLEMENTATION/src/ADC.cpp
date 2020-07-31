@@ -9,11 +9,15 @@
 
 namespace custom_libraries {
 
-_ADC::_ADC(ADC_TypeDef *ADC_,GPIO_TypeDef *GPIO,uint8_t PIN,ADC_channel channel,Sampling_rate sample_rate):ADC_(ADC_),
-																										GPIO(GPIO),
-																										PIN(PIN),
-																										channel(channel),
-																										sample_rate(sample_rate){
+_ADC::_ADC(ADC_TypeDef *ADC_,
+			GPIO_TypeDef *GPIO,
+			uint8_t PIN,
+			ADC_channel channel,
+			Sampling_rate sample_rate):ADC_(ADC_),
+										GPIO(GPIO),
+										PIN(PIN),
+										channel(channel),
+										sample_rate(sample_rate){
 
 	//Enable GPIO_RCC
 	if(GPIO == GPIOA) RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;

@@ -32,8 +32,6 @@ private:
 	ADC_channel channel;
 	Sampling_rate sample_rate;
 
-
-
 private:
 	void delay();
 
@@ -41,7 +39,12 @@ public:
 	uint32_t count = 0;
 
 public:
-	_ADC(ADC_TypeDef *ADC_,GPIO_TypeDef *GPIO,uint8_t PIN,ADC_channel channel,Sampling_rate sample_rate);
+	_ADC(ADC_TypeDef *ADC_,
+		GPIO_TypeDef *GPIO,
+		uint8_t PIN,
+		ADC_channel channel,
+		Sampling_rate sample_rate);
+
 	void initialize();
 	~_ADC();
 
