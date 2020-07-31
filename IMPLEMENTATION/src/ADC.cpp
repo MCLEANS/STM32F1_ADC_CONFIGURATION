@@ -34,18 +34,18 @@ _ADC::_ADC(ADC_TypeDef *ADC_,
 	if(PIN < 8){
 		//SET PIN TO INPUT
 		GPIO->CRL &= ~(1 << (PIN*4));
-		GPIO->CRL &= ~(1 << ((PIN*4)-1));
+		GPIO->CRL &= ~(1 << ((PIN*4)+1));
 		//SET TO ANALOG MODE
 		GPIO->CRL &= ~(1 << ((PIN*4)+2));
-		GPIO->CRL &= ~(1 << (((PIN*4)-1)+2));
+		GPIO->CRL &= ~(1 << (((PIN*4)+2)+1));
 	}
 	else{
 		//SET PIN TO INPUT
 		GPIO->CRH &= ~(1 << ((PIN-8)*4));
-		GPIO->CRH &= ~(1 << (((PIN-8)*4)-1));
+		GPIO->CRH &= ~(1 << (((PIN-8)*4)+1));
 		//SET TO ANALOG MODE
 		GPIO->CRH &= ~(1 << (((PIN-8)*4)+2));
-		GPIO->CRH &= ~(1 << ((((PIN-8)*4)-1)+2));
+		GPIO->CRH &= ~(1 << ((((PIN-8)*4)+2)+1));
 	}
 
 	//Set ADC prescaler
@@ -56,6 +56,7 @@ _ADC::_ADC(ADC_TypeDef *ADC_,
 
 	//ENABLE TRIGGER SOURCE
 	ADC_->CR2 |= ADC_CR2_EXTTRIG;
+
 	//SELECT ACTUAL CONVERSION TRIGGER
 	ADC_->CR2 |= ADC_CR2_EXTSEL;
 
@@ -243,6 +244,11 @@ void _ADC::initialize(){
 	ADC_->CR2 |= ADC_CR2_ADON;
 
 	delay();
+
+	//CALIBRATE THE ADC
+	ADC_->CR2 |= ADC_CR2_CAL;
+	//WAIT FOR ADC TO CALIBRATE
+	while(ADC_->CR2 & ADC_CR2_CAL){}
 	//start first ADC conversion
 	ADC_->CR2 |= ADC_CR2_SWSTART;
 }
