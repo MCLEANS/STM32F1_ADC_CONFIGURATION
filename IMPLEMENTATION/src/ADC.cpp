@@ -45,8 +45,7 @@ _ADC::_ADC(ADC_TypeDef *ADC_,GPIO_TypeDef *GPIO,uint8_t PIN,ADC_channel channel,
 	}
 
 	//Set ADC prescaler
-	//This is done in the ADC common control register
-	ADC->CCR |= ADC_CCR_ADCPRE_0; //prescaler of 4 to set clock to 21MHz (must be < 30MHz)
+	RCC->CFGR |= RCC_CFGR_ADCPRE_1; //prescaler of 6 to set clock to 12MHz (must be < 14MHz)
 
 	//enable ADC end of conversion
 	ADC_->CR1 |= ADC_CR1_EOCIE;
