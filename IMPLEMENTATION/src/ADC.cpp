@@ -54,6 +54,11 @@ _ADC::_ADC(ADC_TypeDef *ADC_,
 	//enable ADC end of conversion
 	ADC_->CR1 |= ADC_CR1_EOCIE;
 
+	//ENABLE TRIGGER SOURCE
+	ADC_->CR2 |= ADC_CR2_EXTTRIG;
+	//SELECT ACTUAL CONVERSION TRIGGER
+	ADC_->CR2 |= ADC_CR2_EXTSEL;
+
 	//Set the sampling rate
 	switch(sample_rate){
 		case SLOW:
