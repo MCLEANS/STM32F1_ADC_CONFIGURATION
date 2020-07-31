@@ -35,7 +35,7 @@ private:
 
 
 private:
-	void delay_ms(uint32_t duration);
+	void delay();
 
 public:
 	uint32_t count = 0;

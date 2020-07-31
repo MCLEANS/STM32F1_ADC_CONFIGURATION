@@ -217,9 +217,8 @@ _ADC::_ADC(ADC_TypeDef *ADC_,GPIO_TypeDef *GPIO,uint8_t PIN,ADC_channel channel,
 	}
 }
 
-void _ADC::delay_ms(uint32_t duration){
-	this->count = 0;
-	while(this->count < duration){}
+void _ADC::delay(){
+	for(int i=0; i<9000000;i++){};
 }
 
 void _ADC::initialize(){
@@ -228,13 +227,13 @@ void _ADC::initialize(){
 	ADC_->CR2 |= ADC_CR2_ADON | ADC_CR2_CONT;
 
 	//delay time Tstab as stated in reference manual
-	delay_ms(2);
+	delay();
 
 	//Enable ADC again to start
 	//The second enable actually enables the ADC
 	ADC_->CR2 |= ADC_CR2_ADON;
 
-	delay_ms(2);
+	delay();
 	//start first ADC conversion
 	ADC_->CR2 |= ADC_CR2_SWSTART;
 }
