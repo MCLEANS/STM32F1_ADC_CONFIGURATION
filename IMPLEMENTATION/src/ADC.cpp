@@ -16,24 +16,33 @@ _ADC::_ADC(ADC_TypeDef *ADC_,GPIO_TypeDef *GPIO,uint8_t PIN,ADC_channel channel,
 																										sample_rate(sample_rate){
 
 	//Enable GPIO_RCC
-	if(GPIO == GPIOA) RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
-	if(GPIO == GPIOB) RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
-	if(GPIO == GPIOC) RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
-	if(GPIO == GPIOD) RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
-	if(GPIO == GPIOE) RCC->AHB1ENR |= RCC_AHB1ENR_GPIOEEN;
-	if(GPIO == GPIOF) RCC->AHB1ENR |= RCC_AHB1ENR_GPIOFEN;
-	if(GPIO == GPIOG) RCC->AHB1ENR |= RCC_AHB1ENR_GPIOGEN;
-	if(GPIO == GPIOH) RCC->AHB1ENR |= RCC_AHB1ENR_GPIOHEN;
-	if(GPIO == GPIOI) RCC->AHB1ENR |= RCC_AHB1ENR_GPIOIEN;
+	if(GPIO == GPIOA) RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
+	if(GPIO == GPIOB) RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+	if(GPIO == GPIOC) RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+	if(GPIO == GPIOD) RCC->APB2ENR |= RCC_APB2ENR_IOPDEN;
+	if(GPIO == GPIOE) RCC->APB2ENR |= RCC_APB2ENR_IOPEEN;
 
 	//Enable ADC_RCC
 	if(ADC_ == ADC1) RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
 	if(ADC_ == ADC2) RCC->APB2ENR |= RCC_APB2ENR_ADC2EN;
-	if(ADC_ == ADC3) RCC->APB2ENR |= RCC_APB2ENR_ADC3EN;
 
 	//Set GPIO to analog mode
-	GPIO->MODER |= (1<<((PIN * 2)));
-	GPIO->MODER |= (1<<((PIN * 2)+1));
+	if(PIN < 8){
+		//SET PIN TO INPUT
+		GPIO->CRL &= ~(1 << (PIN*4));
+		GPIO->CRL &= ~(1 << ((PIN*4)-1));
+		//SET TO ANALOG MODE
+		GPIO->CRL &= ~(1 << ((PIN*4)+2));
+		GPIO->CRL &= ~(1 << (((PIN*4)-1)+2));
+	}
+	else{
+		//SET PIN TO INPUT
+		GPIO->CRH &= ~(1 << ((PIN-8)*4));
+		GPIO->CRH &= ~(1 << (((PIN-8)*4)-1));
+		//SET TO ANALOG MODE
+		GPIO->CRH &= ~(1 << (((PIN-8)*4)+2));
+		GPIO->CRH &= ~(1 << ((((PIN-8)*4)-1)+2));
+	}
 
 	//Set ADC prescaler
 	//This is done in the ADC common control register
