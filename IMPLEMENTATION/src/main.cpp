@@ -13,7 +13,6 @@
 #include "ADC.h"
 
 uint16_t potentiometer_value = 0;
-int data = 0;
 
 custom_libraries::_ADC potentiometer(ADC1,GPIOA,2,custom_libraries::ch2,custom_libraries::SLOW);
 
@@ -22,8 +21,8 @@ extern "C" void ADC1_2_IRQHandler(void){
 	if(ADC1->SR & ADC_SR_EOC){
 		//CLEAR THE FLAG
 		ADC1->SR &= ~ADC_SR_EOC;
+		//READ ADC VALUE
 		potentiometer_value = ADC1->DR;
-		data++;
 		//START THE NEXT CONVERSION
 		ADC1->CR2 |= ADC_CR2_SWSTART;
 	}
